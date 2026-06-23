@@ -1,0 +1,54 @@
+{
+  "$schema": "coder-design-system/v1",
+  "name": "Coder Design System",
+  "description": "Single source of truth for the Etabli suite. Every app derives color, type, spacing, and theming from this file. Do not hardcode values in any app - copy them from here at build time.",
+  "version": "1.0.0",
+  "color": {
+    "accent": {
+      "value": "#28A745",
+      "description": "Etabli signature green. Primary action, selection, brand."
+    },
+    "accentDark": { "value": "#1E7E34", "description": "Pressed/active accent." },
+    "accentLight": { "value": "#48C76A", "description": "Hover/highlight accent." },
+    "light": {
+      "background": "#FFFFFF",
+      "surface": "#F7F8FA",
+      "surfaceAlt": "#EDEFF2",
+      "textPrimary": "#1A1C1E",
+      "textSecondary": "#5A5F66",
+      "border": "#D9DCE1",
+      "error": "#D32F2F"
+    },
+    "dark": {
+      "background": "#121417",
+      "surface": "#1A1D21",
+      "surfaceAlt": "#22262B",
+      "textPrimary": "#F2F4F6",
+      "textSecondary": "#A6ACB3",
+      "border": "#33373D",
+      "error": "#EF5350"
+    }
+  },
+  "typography": {
+    "fontMono": "JetBrains Mono",
+    "fontUI": "system",
+    "scale": {
+      "caption": 12, "body": 15, "callout": 17,
+      "title3": 20, "title2": 24, "title1": 30, "largeTitle": 36
+    },
+    "weight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 }
+  },
+  "spacing": { "xs": 4, "sm": 8, "md": 16, "lg": 24, "xl": 32, "xxl": 48 },
+  "radius": { "sm": 6, "md": 10, "lg": 16, "pill": 999 },
+  "theming": {
+    "modes": ["light", "dark", "system"],
+    "default": "system",
+    "note": "All three modes are mandatory in every app. System follows OS setting."
+  },
+  "icon": {
+    "baseGlyph": "Rounded square tile, accent-green fill (#28A745), white mark centered.",
+    "cornerRadius": "22% of canvas (iOS superellipse handled by OS; ship square master).",
+    "masterSize": 1024,
+    "note": "Each app overlays ONE distinct white line-glyph on the shared green tile so the suite reads as a family. See icons/ICON_SPEC.md."
+  }
+}
