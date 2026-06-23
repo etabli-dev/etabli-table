@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mirror of the Coder DS tokens. Used by AndroidManifest for the
+         system bars; in-Compose colours live in ui/theme/Theme.kt. -->
+    <color name="coder_paper">#FBFBF9</color>
+    <color name="coder_paper_dark">#14171A</color>
+    <color name="coder_accent">#28A745</color>
+</resources>
