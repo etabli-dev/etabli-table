@@ -1,0 +1,1 @@
+Etabli Table is a client for a self-hosted SeaTable backend. Browse and edit tables and rows. Uses a two-token hierarchy (long-lived API token exchanged for a short-lived base token, cached and auto-refreshed). Talks only to your own server.
