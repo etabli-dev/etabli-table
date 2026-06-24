@@ -1,5 +1,5 @@
 ---
-title: "Etabli Table"
+title: "Établi Table"
 sidebar: en
 ---
 
@@ -9,7 +9,7 @@ sidebar: en
 
 > Bases, tables and rows from your own SeaTable — mobile.
 
-Etabli Table is a native iOS and Android client for a self-hosted SeaTable instance. List bases, open tables, view rows and edit individual cells — straight against your own server. Authentication uses a two-tier token hierarchy: a long-lived API token is exchanged for a short-lived base token, which is auto-refreshed.
+Établi Table is a native iOS and Android client for a self-hosted SeaTable instance. List bases, open tables, view rows and edit individual cells — straight against your own server. Authentication uses a two-tier token hierarchy: a long-lived API token is exchanged for a short-lived base token, which is auto-refreshed.
 
 ![Table — login screen with server URL and API token.](../_screens/android-login.png){width=320}
 
@@ -30,10 +30,14 @@ No analytics, no third-party SDKs. Sign-in happens on your self-hosted SeaTable 
 
 ## Installation
 
-| Platform | Source |
-|----------|--------|
-| iOS      | App Store |
-| Android  | Google Play and F-Droid (main repository) |
+Établi Table is **under active development**. There are no App Store, Google Play or F-Droid releases yet.
+
+| Channel | Status |
+|---------|--------|
+| Android (APK) | **Development build** via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) |
+| App Store (iOS) | planned — not yet available |
+| Google Play | planned — not yet available |
+| F-Droid | planned — not yet available |
 
 Details: see [Getting Started](getting-started.qmd).
 

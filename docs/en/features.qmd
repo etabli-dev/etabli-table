@@ -44,6 +44,8 @@ When the base token expires, the app silently requests a new one — no re-authe
 
 | Channel | App |
 |---------|-----|
-| App Store (iOS) · Google Play (Android) | Etabli Table |
-| F-Droid — main repository | Etabli Table |
+| Android (APK) — development build via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) | Établi Table |
+| App Store (iOS) | planned — not yet available |
+| Google Play | planned — not yet available |
+| F-Droid | planned — not yet available |
 | Source code | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |

@@ -1,5 +1,5 @@
 ---
-title: "Etabli Table"
+title: "Établi Table"
 sidebar: fr
 ---
 
@@ -9,7 +9,7 @@ sidebar: fr
 
 > Bases, tables et lignes de votre propre SeaTable — en mobilité.
 
-Etabli Table est un client natif iOS et Android pour une instance SeaTable auto-hébergée. Lister les bases, ouvrir des tables, consulter des lignes et modifier des champs individuels — directement contre votre serveur. L'authentification utilise une hiérarchie à deux jetons : un jeton d'API longue durée est échangé contre un jeton de base court, automatiquement renouvelé.
+Établi Table est un client natif iOS et Android pour une instance SeaTable auto-hébergée. Lister les bases, ouvrir des tables, consulter des lignes et modifier des champs individuels — directement contre votre serveur. L'authentification utilise une hiérarchie à deux jetons : un jeton d'API longue durée est échangé contre un jeton de base court, automatiquement renouvelé.
 
 ![Table — écran de connexion avec URL du serveur et jeton d'API.](../_screens/android-login.png){width=320}
 
@@ -30,10 +30,14 @@ Aucun outil d'analyse, aucun SDK tiers. L'authentification se fait sur votre ser
 
 ## Installation
 
-| Plateforme | Distribution |
-|------------|--------------|
-| iOS        | App Store |
-| Android    | Google Play et F-Droid (dépôt principal) |
+Établi Table est **en cours de développement actif**. Il n'existe pas encore de version App Store, Google Play ou F-Droid.
+
+| Canal | Statut |
+|-------|--------|
+| Android (APK) | **Version de développement** via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) |
+| App Store (iOS) | prévu — pas encore disponible |
+| Google Play | prévu — pas encore disponible |
+| F-Droid | prévu — pas encore disponible |
 
 Détails : voir [Premiers pas](getting-started.qmd).
 

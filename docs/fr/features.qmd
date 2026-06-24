@@ -44,6 +44,8 @@ Table se concentre sur ce dont on a besoin en déplacement : voir les données, 
 
 | Canal | App |
 |-------|-----|
-| App Store (iOS) · Google Play (Android) | Etabli Table |
-| F-Droid — dépôt principal | Etabli Table |
+| Android (APK) — version de développement via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) | Établi Table |
+| App Store (iOS) | prévu — pas encore disponible |
+| Google Play | prévu — pas encore disponible |
+| F-Droid | prévu — pas encore disponible |
 | Code source | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |
