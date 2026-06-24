@@ -3,49 +3,27 @@ title: "Fonctionnalités"
 sidebar: fr
 ---
 
-Table se concentre sur ce dont on a besoin en déplacement : voir les données, les retrouver, les modifier précisément.
+Établi Table est un client natif et léger pour une instance SeaTable auto-hébergée. Il ne dialogue qu'avec le serveur que vous lui indiquez — pas de service central, aucun tiers entre les deux. Les figures ci-dessous sont de vraies captures d'écran de la version 0.1.0 pour Android ; elles montrent les écrans accessibles avant toute connexion à un serveur. Les écrans de données nécessitent une instance SeaTable joignable et ne sont pas simulés ici.
 
-## Modules
+## Non connecté — l'état d'accueil
 
-| Zone | Fonction |
-|------|----------|
-| **Liste des bases** | Toutes les bases accessibles avec le jeton. |
-| **Liste des tables** | Tables d'une base avec nombre de colonnes et de lignes. |
-| **Vue lignes** | Lignes d'une table, filtrées par vue ; défilement infini. |
-| **Vue détail** | Tous les champs d'une ligne dans l'ordre des colonnes. |
-| **Édition** | Modifier des cellules (texte, nombre, sélection, date) et enregistrer. |
+L'onglet d'accueil utilise le fil d'Ariane de style terminal de la suite et indique clairement qu'aucun serveur SeaTable n'est configuré. Il vous renvoie vers les Réglages — c'est là qu'on définit d'abord le serveur et les identifiants. Rien n'est récupéré tant que vous n'êtes pas connecté.
 
-## Modèle d'auth
+![Accueil — non connecté, invitant à configurer un serveur dans les Réglages.](../_screens/0.1.0/01-login.png){width=320}
 
-| Jeton | Durée de vie | Stockage |
-|-------|--------------|----------|
-| **Jeton d'API**  | longue durée (lié à l'utilisateur/workspace) | coffre-fort plateforme |
-| **Jeton de base** | courte durée (émis par SeaTable) | mémoire seulement ; rafraîchissement auto |
+## Réglages — serveur et identifiants
 
-À l'expiration du jeton de base, l'appli en demande un nouveau en arrière-plan — pas de re-authentification.
+Les Réglages sont l'endroit où vous saisissez l'URL de votre instance SeaTable et vos identifiants. Les identifiants résident dans le coffre-fort sécurisé de la plateforme (Android EncryptedSharedPreferences). Une fois connectée, l'application dialogue directement avec votre serveur — et avec lui seul.
 
-## Flux de travail
+![Réglages — saisie de l'URL du serveur SeaTable et des identifiants.](../_screens/0.1.0/02-settings.png){width=320}
 
-| Objectif | Dans l'appli |
-|----------|--------------|
-| Retrouver vite un numéro | Base → table « Contacts » → barre de filtre → mot-clé → détail. |
-| Mettre à jour un statut | Ouvrir la table → ligne → champ statut → nouveau choix → enregistrer. |
-| Saisir une note de terrain | Table → ligne → champ note → saisir → enregistrer. |
+## Écrans dépendant du backend
 
-## Profil réseau
+Les écrans de données — parcourir les bases, ouvrir des tables, consulter des lignes et modifier des champs individuels — nécessitent une **instance SeaTable joignable et des identifiants valides**. Ces écrans ne sont **volontairement pas simulés** ici : ils deviennent accessibles dès que vous connectez un serveur dans les Réglages. Une future capture sur une instance SeaTable de test viendra compléter cette page avec les vues de données en direct.
 
-| Connexion | Cible |
-|-----------|-------|
-| Requêtes HTTPS | uniquement vers l'URL SeaTable configurée. |
-| Auth | jeton d'API / jeton de base dans l'en-tête `Authorization`. |
-| Autres hôtes | non contactés. |
+## Où l'obtenir
 
-## Distribution
+Établi Table est **en cours de développement actif** et, pour l'instant, uniquement disponible sur Android. Installez l'APK de développement signé depuis la version 0.1.0 :
 
-| Canal | App |
-|-------|-----|
-| Android (APK) — version de développement via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) | Établi Table |
-| App Store (iOS) | prévu — pas encore disponible |
-| Google Play | prévu — pas encore disponible |
-| F-Droid | prévu — pas encore disponible |
-| Code source | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |
+- **Android (APK signé)** — [GitHub Releases · v0.1.0](https://github.com/etabli-dev/etabli-table/releases/tag/v0.1.0)
+- App Store (iOS), Google Play et F-Droid — prévus, pas encore disponibles.

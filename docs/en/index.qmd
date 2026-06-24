@@ -11,7 +11,7 @@ sidebar: en
 
 Établi Table is a native iOS and Android client for a self-hosted SeaTable instance. List bases, open tables, view rows and edit individual cells — straight against your own server. Authentication uses a two-tier token hierarchy: a long-lived API token is exchanged for a short-lived base token, which is auto-refreshed.
 
-![Table — login screen with server URL and API token.](../_screens/android-login.png){width=320}
+![Table — not connected; configure the SeaTable server and credentials in Settings.](../_screens/0.1.0/01-login.png){width=320}
 
 ## Who benefits
 

@@ -3,49 +3,27 @@ title: "Features"
 sidebar: en
 ---
 
-Table focuses on what you need on the move: view data, find it, change it precisely.
+Établi Table is a lean, native client for a self-hosted SeaTable instance. It talks only to the server you point it at — there is no central service and no third party in between. The figures below are real screenshots of the v0.1.0 Android build; they show the screens you can reach before connecting a server. The data screens require a reachable SeaTable instance and are not faked here.
 
-## Modules
+## Not connected — the home state
 
-| Area | What it does |
-|------|--------------|
-| **Base list** | Every base the token can reach. |
-| **Table list** | Tables in a base with column and row counts. |
-| **Rows view** | Rows in a table, filtered by view; infinite scroll. |
-| **Detail view** | Every field of a row in column order. |
-| **Edit** | Change individual cells (text, number, select, date) and save. |
+The home tab uses the suite's terminal-style breadcrumb and clearly states that no SeaTable server is configured. It points you to Settings — set the server and credentials there first. Nothing is fetched until you connect.
 
-## Auth model
+![Home — not connected, prompting you to configure a server in Settings.](../_screens/0.1.0/01-login.png){width=320}
 
-| Token | Lifetime | Where it lives |
-|-------|----------|----------------|
-| **API token**  | long-lived (user/workspace-bound) | platform secure store |
-| **Base token** | short-lived (issued by SeaTable) | memory only; auto-refreshed |
+## Settings — server & credentials
 
-When the base token expires, the app silently requests a new one — no re-authentication.
+Settings is where you enter your SeaTable instance URL and credentials. Credentials live in the platform secure store (Android EncryptedSharedPreferences). Once connected, the app talks directly to your server — and only to that server.
 
-## Workflows
+![Settings — enter the SeaTable server URL and credentials.](../_screens/0.1.0/02-settings.png){width=320}
 
-| Goal | In the app |
-|------|------------|
-| Look up a phone number fast | Base → "Contacts" table → filter bar → keyword → detail. |
-| Update a status field | Open table → row → status field → new choice → save. |
-| Capture a field note | Table → row → note field → type → save. |
+## Backend-dependent screens
 
-## Network profile
-
-| Connection | Target |
-|------------|--------|
-| HTTPS requests | only to the configured SeaTable URL. |
-| Auth | API / base token in the `Authorization` header. |
-| Other hosts | not contacted. |
+The data screens — browsing bases, opening tables, viewing rows and editing individual cells — require a **reachable SeaTable instance and valid credentials**. Those screens are intentionally **not faked** here: they become available once you connect a server in Settings. A future capture against a test SeaTable instance will extend this page with the live data views.
 
 ## Where to get it
 
-| Channel | App |
-|---------|-----|
-| Android (APK) — development build via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) | Établi Table |
-| App Store (iOS) | planned — not yet available |
-| Google Play | planned — not yet available |
-| F-Droid | planned — not yet available |
-| Source code | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |
+Établi Table is **under active development** and currently Android-only. Install the signed development APK from the v0.1.0 release:
+
+- **Android (signed APK)** — [GitHub Releases · v0.1.0](https://github.com/etabli-dev/etabli-table/releases/tag/v0.1.0)
+- App Store (iOS), Google Play and F-Droid — planned, not yet available.
