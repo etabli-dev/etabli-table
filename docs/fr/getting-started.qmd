@@ -1,0 +1,36 @@
+---
+title: "Premiers pas"
+sidebar: fr
+---
+
+## Prérequis
+
+- Une instance SeaTable auto-hébergée et accessible (HTTPS recommandé).
+- Un jeton d'API (au niveau workspace ou base — voir ci-dessous).
+
+## Créer un jeton d'API dans SeaTable
+
+SeaTable propose deux niveaux de jeton d'API — les deux fonctionnent avec l'appli :
+
+| Niveau | Où le créer | Portée |
+|--------|-------------|--------|
+| **Jeton workspace** | Workspace → Paramètres → Jetons d'API | accès à toutes les bases du workspace |
+| **Jeton base** | Ouvrir la base → menu ⋯ → Jeton d'API | accès uniquement à cette base |
+
+Dans les deux cas : copier le jeton, le coller dans l'appli.
+
+## Configurer l'appli
+
+1. Installer l'appli depuis le store et l'ouvrir.
+2. Dans l'écran de configuration, saisir :
+   - **URL du serveur** (p. ex. `https://seatable.example.org`)
+   - **Jeton d'API** issu de l'étape précédente
+3. L'appli échange le jeton d'API contre un jeton de base court et charge la liste des bases accessibles.
+
+![Écran de configuration avec champs pour l'URL du serveur et le jeton d'API.](../_screens/android-login.png){width=320}
+
+## Remarques
+
+- Le jeton de base expire régulièrement ; l'appli en demande un nouveau en arrière-plan, sans intervention.
+- L'appli modifie des lignes directement via l'API SeaTable ; les changements de schéma plus profonds (nouvelles colonnes, nouvelles tables) restent dans l'interface web.
+- Les identifiants restent dans le coffre-fort de l'appareil.

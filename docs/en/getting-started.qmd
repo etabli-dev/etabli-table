@@ -1,0 +1,36 @@
+---
+title: "Getting Started"
+sidebar: en
+---
+
+## Requirements
+
+- A self-hosted, reachable SeaTable instance (HTTPS recommended).
+- An API token (workspace- or base-level — see below).
+
+## Create an API token in SeaTable
+
+SeaTable offers two API-token tiers — both work with the app:
+
+| Tier | Where to create | Scope |
+|------|-----------------|-------|
+| **Workspace API token** | Workspace → Settings → API tokens | access to every base in the workspace |
+| **Base API token** | Open the base → ⋯ menu → API token | access to this single base only |
+
+Either way: copy the token, paste it into the app.
+
+## Configure the app
+
+1. Install the app from the store and open it.
+2. In the setup dialog, enter:
+   - **Server URL** (e.g. `https://seatable.example.org`)
+   - **API Token** from the step above
+3. The app exchanges the API token for a short-lived base token and loads the list of reachable bases.
+
+![Setup screen with fields for server URL and API token.](../_screens/android-login.png){width=320}
+
+## Notes
+
+- The base token expires regularly; the app fetches a fresh one in the background — no re-entry.
+- The app edits rows directly via the SeaTable API; bigger schema changes (new columns, new tables) stay in the web UI.
+- Credentials remain in the platform secure store.

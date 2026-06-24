@@ -1,0 +1,49 @@
+---
+title: "Features"
+sidebar: en
+---
+
+Table focuses on what you need on the move: view data, find it, change it precisely.
+
+## Modules
+
+| Area | What it does |
+|------|--------------|
+| **Base list** | Every base the token can reach. |
+| **Table list** | Tables in a base with column and row counts. |
+| **Rows view** | Rows in a table, filtered by view; infinite scroll. |
+| **Detail view** | Every field of a row in column order. |
+| **Edit** | Change individual cells (text, number, select, date) and save. |
+
+## Auth model
+
+| Token | Lifetime | Where it lives |
+|-------|----------|----------------|
+| **API token**  | long-lived (user/workspace-bound) | platform secure store |
+| **Base token** | short-lived (issued by SeaTable) | memory only; auto-refreshed |
+
+When the base token expires, the app silently requests a new one — no re-authentication.
+
+## Workflows
+
+| Goal | In the app |
+|------|------------|
+| Look up a phone number fast | Base → "Contacts" table → filter bar → keyword → detail. |
+| Update a status field | Open table → row → status field → new choice → save. |
+| Capture a field note | Table → row → note field → type → save. |
+
+## Network profile
+
+| Connection | Target |
+|------------|--------|
+| HTTPS requests | only to the configured SeaTable URL. |
+| Auth | API / base token in the `Authorization` header. |
+| Other hosts | not contacted. |
+
+## Where to get it
+
+| Channel | App |
+|---------|-----|
+| App Store (iOS) · Google Play (Android) | Etabli Table |
+| F-Droid — main repository | Etabli Table |
+| Source code | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |

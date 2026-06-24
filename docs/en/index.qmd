@@ -1,0 +1,42 @@
+---
+title: "Etabli Table"
+sidebar: en
+---
+
+<img src="../_icons/icon-table.svg" alt="" width="80" align="right" style="margin:0 0 1rem 1rem;">
+
+<span class="etabli-badge">Self-hosted client</span>
+
+> Bases, tables and rows from your own SeaTable — mobile.
+
+Etabli Table is a native iOS and Android client for a self-hosted SeaTable instance. List bases, open tables, view rows and edit individual cells — straight against your own server. Authentication uses a two-tier token hierarchy: a long-lived API token is exchanged for a short-lived base token, which is auto-refreshed.
+
+![Table — login screen with server URL and API token.](../_screens/android-login.png){width=320}
+
+## Who benefits
+
+Anyone self-hosting SeaTable (or using their own SeaTable Cloud instance) who needs to reach data on the go — to jot a field note, look up an address, or update a status field.
+
+## Platforms
+
+| Platform | Status |
+|----------|--------|
+| iOS      | ✓      |
+| Android  | ✓      |
+
+## Privacy
+
+No analytics, no third-party SDKs. Sign-in happens on your self-hosted SeaTable server. Credentials (URL + API token) live only in the platform secure store (iOS Keychain · Android EncryptedSharedPreferences); the short-lived base token is kept in memory and auto-refreshed. Traffic only goes to the configured instance.
+
+## Installation
+
+| Platform | Source |
+|----------|--------|
+| iOS      | App Store |
+| Android  | Google Play and F-Droid (main repository) |
+
+Details: see [Getting Started](getting-started.qmd).
+
+## Support
+
+If you find the app useful: [Liberapay](https://liberapay.com/rabanheller/) · inside the app you will also find a Buy-Me-a-Coffee link.

@@ -1,0 +1,49 @@
+---
+title: "Funktionen"
+sidebar: de
+---
+
+Table konzentriert sich auf das, was unterwegs gebraucht wird: Daten ansehen, finden, gezielt ändern.
+
+## Module
+
+| Bereich | Funktion |
+|---------|----------|
+| **Base-Liste** | Übersicht aller per Token erreichbaren Bases. |
+| **Tabellen-Liste** | Tabellen einer Base mit Spalten- und Zeilenzahl. |
+| **Zeilen-Ansicht** | Zeilen einer Tabelle, gefiltert nach View; Endlos-Scroll. |
+| **Detail-Ansicht** | Alle Felder einer Zeile in Spalten-Reihenfolge. |
+| **Bearbeiten** | Einzelne Zellen (Text, Zahl, Auswahl, Datum) direkt ändern und speichern. |
+
+## Auth-Modell
+
+| Token | Lebensdauer | Wo gehalten |
+|-------|-------------|-------------|
+| **API-Token**  | langlebig (Nutzer-/Workspace-gebunden) | Plattform-Schlüsselspeicher |
+| **Base-Token** | kurzlebig (von SeaTable vergeben)      | nur im Speicher; Auto-Refresh |
+
+Beim Ablauf des Base-Tokens fordert die App im Hintergrund ein neues an — keine Re-Authentifizierung durch den Nutzer.
+
+## Workflows
+
+| Ziel | Schritte in der App |
+|------|---------------------|
+| Eine Telefonnummer schnell nachschlagen | Base → Tabelle „Kontakte" → Filterleiste → Stichwort → Detail. |
+| Status eines Vorgangs aktualisieren | Tabelle öffnen → Zeile → Status-Feld → neue Auswahl → speichern. |
+| Eine Notiz vom Feld eintragen | Tabelle → Zeile → Notiz-Feld → Text eintragen → speichern. |
+
+## Netzwerkprofil
+
+| Verbindung | Ziel |
+|------------|------|
+| HTTPS-Anfragen | ausschließlich an die konfigurierte SeaTable-URL. |
+| Auth | API- / Base-Token im `Authorization`-Header. |
+| Sonstige Hosts | werden nicht kontaktiert. |
+
+## Bezug
+
+| Kanal | App |
+|-------|-----|
+| App Store (iOS) · Google Play (Android) | Etabli Table |
+| F-Droid — Haupt-Repository | Etabli Table |
+| Quellcode | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |

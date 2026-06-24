@@ -1,0 +1,49 @@
+---
+title: "Fonctionnalités"
+sidebar: fr
+---
+
+Table se concentre sur ce dont on a besoin en déplacement : voir les données, les retrouver, les modifier précisément.
+
+## Modules
+
+| Zone | Fonction |
+|------|----------|
+| **Liste des bases** | Toutes les bases accessibles avec le jeton. |
+| **Liste des tables** | Tables d'une base avec nombre de colonnes et de lignes. |
+| **Vue lignes** | Lignes d'une table, filtrées par vue ; défilement infini. |
+| **Vue détail** | Tous les champs d'une ligne dans l'ordre des colonnes. |
+| **Édition** | Modifier des cellules (texte, nombre, sélection, date) et enregistrer. |
+
+## Modèle d'auth
+
+| Jeton | Durée de vie | Stockage |
+|-------|--------------|----------|
+| **Jeton d'API**  | longue durée (lié à l'utilisateur/workspace) | coffre-fort plateforme |
+| **Jeton de base** | courte durée (émis par SeaTable) | mémoire seulement ; rafraîchissement auto |
+
+À l'expiration du jeton de base, l'appli en demande un nouveau en arrière-plan — pas de re-authentification.
+
+## Flux de travail
+
+| Objectif | Dans l'appli |
+|----------|--------------|
+| Retrouver vite un numéro | Base → table « Contacts » → barre de filtre → mot-clé → détail. |
+| Mettre à jour un statut | Ouvrir la table → ligne → champ statut → nouveau choix → enregistrer. |
+| Saisir une note de terrain | Table → ligne → champ note → saisir → enregistrer. |
+
+## Profil réseau
+
+| Connexion | Cible |
+|-----------|-------|
+| Requêtes HTTPS | uniquement vers l'URL SeaTable configurée. |
+| Auth | jeton d'API / jeton de base dans l'en-tête `Authorization`. |
+| Autres hôtes | non contactés. |
+
+## Distribution
+
+| Canal | App |
+|-------|-----|
+| App Store (iOS) · Google Play (Android) | Etabli Table |
+| F-Droid — dépôt principal | Etabli Table |
+| Code source | [`etabli-dev/etabli-table`](https://github.com/etabli-dev/etabli-table) |

@@ -1,0 +1,19 @@
+---
+title: "Etabli Table"
+format:
+  html:
+    page-layout: full
+    toc: false
+---
+
+<p align="center" style="margin-top:2rem;">
+  <img src="_icons/icon-table.svg" alt="Table" width="96">
+</p>
+
+<h2 style="text-align:center; margin:1rem 0 2rem;">Sprache wählen · Choose language · Choisir la langue</h2>
+
+<p align="center" style="font-size:1.1rem;">
+  <a href="de/">Auf Deutsch</a> ·
+  <a href="en/">In English</a> ·
+  <a href="fr/">En français</a>
+</p>

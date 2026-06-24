@@ -1,0 +1,82 @@
+project:
+  type: website
+  output-dir: _site
+
+format:
+  html:
+    theme:
+      light: [cosmo, theme/etabli.scss]
+      dark: [cosmo, theme/etabli.scss]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-newwindow: true
+    grid:
+      sidebar-width: 270px
+      body-width: 900px
+
+website:
+  title: "Etabli Table"
+  description: "Mobiler Client für deine eigene SeaTable-Instanz."
+  reader-mode: true
+  back-to-top-navigation: true
+  navbar:
+    pinned: true
+    logo: assets/etabli-logo.svg
+    right:
+      - text: "DE"
+        href: de/index.qmd
+      - text: "EN"
+        href: en/index.qmd
+      - text: "FR"
+        href: fr/index.qmd
+      - icon: github
+        text: "Code"
+        href: "https://github.com/etabli-dev/etabli-table"
+  sidebar:
+    - id: de
+      title: "Etabli Table"
+      style: floating
+      contents:
+        - section: "Auf Deutsch"
+          contents:
+            - text: "Überblick"
+              href: de/index.qmd
+            - text: "Erste Schritte"
+              href: de/getting-started.qmd
+            - text: "Funktionen"
+              href: de/features.qmd
+    - id: en
+      title: "Etabli Table"
+      style: floating
+      contents:
+        - section: "In English"
+          contents:
+            - text: "Overview"
+              href: en/index.qmd
+            - text: "Getting Started"
+              href: en/getting-started.qmd
+            - text: "Features"
+              href: en/features.qmd
+    - id: fr
+      title: "Etabli Table"
+      style: floating
+      contents:
+        - section: "En français"
+          contents:
+            - text: "Aperçu"
+              href: fr/index.qmd
+            - text: "Premiers pas"
+              href: fr/getting-started.qmd
+            - text: "Fonctionnalités"
+              href: fr/features.qmd
+  page-footer:
+    left: "Apache-2.0 · © 2026 Raban Heller"
+    right:
+      - text: "Liberapay"
+        href: "https://liberapay.com/rabanheller/"
+      - text: "GitHub"
+        href: "https://github.com/etabli-dev/etabli-table"

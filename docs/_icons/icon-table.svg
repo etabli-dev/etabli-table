@@ -1,0 +1,12 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="1024" fill="#28A745"/>
+  <g id="glyph" fill="none" stroke="#FFFFFF" stroke-width="36"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- 3x3 grid -->
+    <rect x="280" y="280" width="464" height="464" rx="20"/>
+    <line x1="435" y1="280" x2="435" y2="744"/>
+    <line x1="590" y1="280" x2="590" y2="744"/>
+    <line x1="280" y1="435" x2="744" y2="435"/>
+    <line x1="280" y1="590" x2="744" y2="590"/>
+  </g>
+</svg>
