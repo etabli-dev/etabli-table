@@ -19,6 +19,7 @@ import com.raban.etabli.table.EtabliTableApplication
 import com.raban.etabli.table.net.TSAccess
 import com.raban.etabli.table.ui.theme.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
 
 @Composable
 fun SettingsScreen(app: EtabliTableApplication) {
@@ -58,12 +59,11 @@ fun SettingsScreen(app: EtabliTableApplication) {
                 scope.launch {
                     busy = true; status = null; access = null
                     try {
-                        app.client.configure(base.trim(), token.trim())
-                        access = app.client.ensureBaseToken(forceRefresh = true)
+                        access = app.client.configure(base.trim(), token.trim())
                         status = "OK — base \"${access!!.appName}\" reachable."
                         statusTone = StatusTone.Accent
                         token = ""
-                    } catch (e: Throwable) {
+                    } catch (e: CancellationException) { throw e } catch (e: Exception) {
                         status = e.message ?: "Failed"
                         statusTone = StatusTone.Danger
                     } finally { busy = false }
@@ -72,7 +72,9 @@ fun SettingsScreen(app: EtabliTableApplication) {
             if (current != null) {
                 PrimaryButton("Disconnect", icon = Icons.AutoMirrored.Filled.Logout) {
                     scope.launch {
-                        app.client.disconnect()
+                        try { app.client.disconnect() }
+                        catch (e: CancellationException) { throw e }
+                        catch (e: Exception) { status = "Could not disconnect: ${e.message}"; statusTone = StatusTone.Danger; return@launch }
                         status = "Disconnected"
                         statusTone = StatusTone.Info
                         access = null

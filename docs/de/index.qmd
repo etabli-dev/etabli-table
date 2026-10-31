@@ -3,44 +3,10 @@ title: "Établi Table"
 sidebar: de
 ---
 
-<img src="../_icons/icon-table.svg" alt="" width="80" align="right" style="margin:0 0 1rem 1rem;">
+Eine SeaTable-Base, ihre Tabellen und die ersten 100 Zeilen mit einem Base-API-Token ansehen. Zellenbearbeitung und Seitennavigation sind nicht verfügbar. Bei einem Autorisierungsfehler wird der Zugriffstoken einmal erneuert.
 
-<span class="etabli-badge">Self-hosted-Client</span>
+Diese Seite beschreibt den Quellstand vom Oktober 2026. Die Änderungen im Quellcode sind nicht Teil der Downloads älterer Entwicklungsreleases. Lokale Prüfungen ersetzen keine Geräte-, Live-Server- oder Store-Abnahme.
 
-> Bases, Tabellen und Zeilen aus deinem SeaTable — mobil.
+[Aktueller Funktionsumfang, Voraussetzungen und Befehle (Englisch)](../current-status.qmd)
 
-Établi Table ist ein nativer iOS- und Android-Client für eine eigene SeaTable-Instanz. Bases auflisten, Tabellen öffnen, Zeilen ansehen und einzelne Felder bearbeiten — direkt gegen den eigenen Server. Authentifizierung erfolgt mit einer zweistufigen Token-Hierarchie: ein langlebiges API-Token wird gegen ein kurzlebiges Base-Token getauscht, das automatisch aufgefrischt wird.
-
-![Table — nicht verbunden; SeaTable-Server und Anmeldedaten in den Einstellungen konfigurieren.](../_screens/0.1.0/01-login.png){width=320}
-
-## Wer profitiert davon
-
-Wer SeaTable selbst hostet (oder eine eigene SeaTable-Cloud-Instanz nutzt) und auf Daten unterwegs zugreifen muss — etwa zum Erfassen einer Notiz im Feld, zum schnellen Nachschlagen einer Adresse oder zum Aktualisieren eines Status-Feldes.
-
-## Plattformen
-
-| Plattform | Status |
-|-----------|--------|
-| iOS       | ✓      |
-| Android   | ✓      |
-
-## Datenschutz
-
-Keine Analyse-Tools, keine Drittanbieter-SDKs. Anmeldung erfolgt am eigenen self-hosted SeaTable-Server. Anmeldedaten (URL + API-Token) liegen ausschließlich im Plattform-Schlüsselspeicher (iOS Keychain · Android EncryptedSharedPreferences); das kurzlebige Base-Token wird im Speicher gehalten und automatisch erneuert. Datenverkehr ausschließlich zur konfigurierten Instanz.
-
-## Installation
-
-Établi Table befindet sich **in aktiver Entwicklung**. Es gibt noch keine Veröffentlichung im App Store, bei Google Play oder F-Droid.
-
-| Kanal | Status |
-|-------|--------|
-| Android (APK) | **Entwicklungs-Build** über [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) |
-| App Store (iOS) | geplant — noch nicht verfügbar |
-| Google Play | geplant — noch nicht verfügbar |
-| F-Droid | geplant — noch nicht verfügbar |
-
-Details siehe [Erste Schritte](getting-started.qmd).
-
-## Unterstützen
-
-Wenn dir die App nützt: [Liberapay](https://liberapay.com/rabanheller/).
+[README](https://github.com/etabli-dev/etabli-table/blob/main/README.md) · [GitHub](https://github.com/etabli-dev/etabli-table)

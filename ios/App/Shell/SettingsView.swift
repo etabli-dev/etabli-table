@@ -107,8 +107,7 @@ struct SettingsView: View {
         connecting = true; error = nil; info = nil
         Task {
             do {
-                try client.configure(apiBase: url, apiToken: token.trimmingCharacters(in: .whitespaces))
-                let active = try await client.ensureBaseToken(forceRefresh: true)
+                let active = try await client.configure(apiBase: url, apiToken: token.trimmingCharacters(in: .whitespaces))
                 info = "Connected to base: \(active.app_name ?? active.dtable_uuid)"
             } catch {
                 self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription

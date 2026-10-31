@@ -5,6 +5,7 @@ package com.raban.etabli.table.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,6 +25,8 @@ import com.raban.etabli.table.net.TSMetadata
 import com.raban.etabli.table.net.TSTable
 import com.raban.etabli.table.ui.theme.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.CancellationException
 import org.json.JSONObject
 
 @Composable
@@ -36,34 +39,43 @@ fun BaseScreen(app: EtabliTableApplication) {
     var rows by remember { mutableStateOf<List<JSONObject>?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(false) }
+    var loadJob by remember { mutableStateOf<Job?>(null) }
+    var generation by remember { mutableLongStateOf(0L) }
+    DisposableEffect(Unit) { onDispose { loadJob?.cancel() } }
 
     fun loadMetadata() {
-        if (config == null) { meta = null; rows = null; return }
-        scope.launch {
+        val request = ++generation
+        loadJob?.cancel()
+        if (config == null) { meta = null; selected = null; rows = null; loading = false; return }
+        loadJob = scope.launch {
             loading = true; error = null
             try {
                 meta = app.client.metadata()
                 selected = meta?.tables?.firstOrNull()
                 selected?.let { rows = app.client.rows(it.name, limit = 100) }
-            } catch (e: Throwable) { error = e.message; meta = null }
-            finally { loading = false }
+            } catch (e: CancellationException) { throw e }
+            catch (e: Exception) { error = e.message; meta = null }
+            finally { if (generation == request) loading = false }
         }
     }
 
     fun loadRows(tbl: TSTable) {
-        scope.launch {
+        val request = ++generation
+        loadJob?.cancel()
+        loadJob = scope.launch {
             loading = true; error = null
             selected = tbl
             try { rows = app.client.rows(tbl.name, limit = 100) }
-            catch (e: Throwable) { error = e.message; rows = null }
-            finally { loading = false }
+            catch (e: CancellationException) { throw e }
+            catch (e: Exception) { error = e.message; rows = null }
+            finally { if (generation == request) loading = false }
         }
     }
 
     LaunchedEffect(config) { loadMetadata() }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(t.color.paper).padding(t.space.lg),
+        modifier = Modifier.fillMaxSize().background(t.color.paper).verticalScroll(rememberScrollState()).padding(t.space.lg),
         verticalArrangement = Arrangement.spacedBy(t.space.md),
     ) {
         PromptHeader(listOf("base", selected?.name ?: "—"))
@@ -90,16 +102,20 @@ fun BaseScreen(app: EtabliTableApplication) {
                             }
                         }
                     }
-                    Card(title = "rows (${rows?.size ?: "—"})", icon = Icons.Default.TableChart) {
+                    Card(title = "rows (${rows?.size ?: "—"}, first 100)", icon = Icons.Default.TableChart) {
                         when {
                             loading -> MonoLabel("loading rows…", color = t.color.faint)
                             error != null -> MonoLabel("⚠ $error", color = t.color.danger)
                             rows == null -> MonoLabel("—", color = t.color.faint)
                             rows!!.isEmpty() -> MonoLabel("(empty)", color = t.color.faint)
                             else -> Column {
-                                rows!!.take(50).forEachIndexed { idx, row ->
+                                rows!!.forEachIndexed { idx, row ->
                                     if (idx > 0) Spacer(Modifier.height(t.space.xs))
-                                    MonoLabel(row.toString().take(140), color = t.color.faint)
+                                    MonoLabel("row ${idx + 1}", color = t.color.accent)
+                                    tbl.columns.forEach { column ->
+                                        val value = if (row.has(column.key)) row.opt(column.key) else row.opt(column.name)
+                                        Text("${column.name}: ${if (value == null || value == JSONObject.NULL) "—" else value}", style = t.font.mono)
+                                    }
                                 }
                             }
                         }

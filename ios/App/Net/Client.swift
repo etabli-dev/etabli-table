@@ -19,6 +19,7 @@ import Observation
 public struct TSConfig: Equatable, Sendable {
     public var apiBase: URL
     public var hasToken: Bool
+    public var revision = UUID()
 }
 
 public enum TSError: Error, LocalizedError {
@@ -44,6 +45,7 @@ public struct TSAccessTokenResponse: Decodable, Sendable {
     public let dtable_uuid: String
     public let dtable_server: String?
     public let workspace_id: Int?
+    public let use_api_gateway: Bool?
 }
 
 public struct TSMetadata: Decodable, Sendable {
@@ -96,35 +98,59 @@ public final class TSClient {
 
     public private(set) var config: TSConfig?
     public private(set) var activeBase: TSAccessTokenResponse?
-    private let session: URLSession
+    private let session: ClientHTTP
+    private let defaults: UserDefaults
+    private var connectionIntent = UUID()
     private let decoder = JSONDecoder()
     private let keychainService = "tablesync.seatable"
     private let urlKey = "tablesync.seatable.baseurl"
 
-    public init(session: URLSession = .shared) {
-        self.session = session
-        if let stored = UserDefaults.standard.url(forKey: urlKey),
+    public init(session: URLSession = .shared, defaults: UserDefaults = .standard) {
+        self.session = ClientHTTP(configuration: session.configuration)
+        self.defaults = defaults
+        if let saved = (try? Keychain.get(service: keychainService, account: "connection.v2")) ?? nil {
+            guard let value = try? JSONDecoder().decode(StoredConnection.self, from: Data(saved.utf8)),
+                  (try? secureServer(value.server)) != nil, !value.token.isEmpty else { return }
+            self.config = TSConfig(apiBase: value.server, hasToken: true)
+            return
+        }
+        if let stored = defaults.url(forKey: urlKey), (try? secureServer(stored)) != nil,
            let token = (try? Keychain.get(service: keychainService, account: "api-token")) ?? nil,
            !token.isEmpty {
             self.config = TSConfig(apiBase: stored, hasToken: true)
         }
     }
 
-    public func configure(apiBase: URL, apiToken: String) throws {
-        UserDefaults.standard.set(apiBase, forKey: urlKey)
-        try Keychain.set(apiToken, service: keychainService, account: "api-token")
-        config = TSConfig(apiBase: apiBase, hasToken: true)
-        activeBase = nil
+    @discardableResult
+    public func configure(apiBase: URL, apiToken: String) async throws -> TSAccessTokenResponse {
+        let intent = UUID(); connectionIntent = intent
+        let base = try secureServer(apiBase)
+        guard !apiToken.isEmpty else { throw TSError.notConfigured }
+        let access = try await exchange(base: base, token: apiToken)
+        guard connectionIntent == intent else { throw CancellationError() }
+        let saved = try JSONEncoder().encode(StoredConnection(server: base, token: apiToken))
+        try Keychain.set(String(decoding: saved, as: UTF8.self), service: keychainService, account: "connection.v2")
+        defaults.set(base, forKey: urlKey)
+        config = TSConfig(apiBase: base, hasToken: true)
+        activeBase = access
+        return access
     }
 
     public func disconnect() throws {
+        connectionIntent = UUID()
         try Keychain.delete(service: keychainService, account: "api-token")
-        UserDefaults.standard.removeObject(forKey: urlKey)
+        try Keychain.delete(service: keychainService, account: "connection.v2")
+        defaults.removeObject(forKey: urlKey)
         config = nil
         activeBase = nil
     }
 
     private func apiToken() throws -> String {
+        if let saved = try Keychain.get(service: keychainService, account: "connection.v2") {
+            let value = try JSONDecoder().decode(StoredConnection.self, from: Data(saved.utf8))
+            guard value.server == config?.apiBase else { throw TSError.notConfigured }
+            return value.token
+        }
         guard let t = try Keychain.get(service: keychainService, account: "api-token"), !t.isEmpty
         else { throw TSError.notConfigured }
         return t
@@ -137,49 +163,45 @@ public final class TSClient {
     public func ensureBaseToken(forceRefresh: Bool = false) async throws -> TSAccessTokenResponse {
         if !forceRefresh, let active = activeBase { return active }
         guard let cfg = config else { throw TSError.notConfigured }
-        let url = cfg.apiBase.appendingPathComponent("api/v2.1/dtable/app-access-token/")
-        var req = URLRequest(url: url)
-        req.setValue("Token \(try apiToken())", forHTTPHeaderField: "Authorization")
-        req.setValue("application/json", forHTTPHeaderField: "Accept")
-        let (data, response) = try await session.data(for: req)
+        let expected = config
+        let access = try await exchange(base: cfg.apiBase, token: apiToken())
+        guard config == expected else { throw CancellationError() }
+        activeBase = access
+        return access
+    }
+
+    private func exchange(base: URL, token: String) async throws -> TSAccessTokenResponse {
+        var request = URLRequest(url: try secureServer(base).appendingPathComponent("api/v2.1/dtable/app-access-token/"))
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        let (data, response) = try await session.data(for: request)
         try Self.check(response, data: data)
         do {
-            let resp = try decoder.decode(TSAccessTokenResponse.self, from: data)
-            activeBase = resp
-            return resp
+            let access = try decoder.decode(TSAccessTokenResponse.self, from: data)
+            _ = try Self.baseURL(access, resource: "metadata")
+            return access
         } catch { throw TSError.decoding(error.localizedDescription) }
+    }
+
+    static func baseURL(_ access: TSAccessTokenResponse, resource: String) throws -> URL {
+        guard !access.access_token.isEmpty, UUID(uuidString: access.dtable_uuid) != nil,
+              let raw = access.dtable_server, let url = URL(string: raw) else { throw TSError.decoding("Invalid base token response") }
+        let server = try secureServer(url)
+        let version = access.use_api_gateway == true || server.path.hasSuffix("/api-gateway") ? "v2" : "v1"
+        return server.appendingPathComponent("api/\(version)/dtables/\(access.dtable_uuid)/\(resource)/")
     }
 
     // MARK: - Metadata + rows
 
     public func metadata() async throws -> TSMetadata {
-        let token = try await ensureBaseToken()
-        guard let serverString = token.dtable_server,
-              let server = URL(string: serverString) else {
-            throw TSError.transport("No dtable_server returned from token exchange")
-        }
-        let url = server.appendingPathComponent("api/v1/dtables/\(token.dtable_uuid)/metadata/")
-        return try await dtableGet(url: url, accessToken: token.access_token, as: TSMetadata.self)
+        try await dtableGet(resource: "metadata", as: TSMetadata.self)
     }
 
     public struct RowsResponse: Decodable, Sendable { public let rows: [[String: TSJSON]] }
 
     public func rows(table: String, limit: Int = 500) async throws -> [[String: TSJSON]] {
-        let token = try await ensureBaseToken()
-        guard let serverString = token.dtable_server,
-              let server = URL(string: serverString) else {
-            throw TSError.transport("No dtable_server")
-        }
-        guard var comps = URLComponents(
-            url: server.appendingPathComponent("api/v1/dtables/\(token.dtable_uuid)/rows/"),
-            resolvingAgainstBaseURL: false
-        ) else { throw TSError.transport("Couldn't build URL") }
-        comps.queryItems = [
-            URLQueryItem(name: "table_name", value: table),
-            URLQueryItem(name: "limit", value: String(limit)),
-        ]
-        guard let url = comps.url else { throw TSError.transport("Couldn't build URL") }
-        let payload = try await dtableGet(url: url, accessToken: token.access_token, as: RowsResponse.self)
+        guard !table.isEmpty && (1...1000).contains(limit) else { throw TSError.decoding("Select a table and a row limit from 1 to 1000") }
+        let payload = try await dtableGet(resource: "rows", query: [URLQueryItem(name: "table_name", value: table), URLQueryItem(name: "limit", value: String(limit))], as: RowsResponse.self)
         return payload.rows
     }
 
@@ -187,11 +209,8 @@ public final class TSClient {
     /// single POST — we never call the per-row endpoint in a loop.
     public func appendRows(table: String, rows: [[String: TSJSON]]) async throws {
         let token = try await ensureBaseToken()
-        guard let serverString = token.dtable_server,
-              let server = URL(string: serverString) else {
-            throw TSError.transport("No dtable_server")
-        }
-        let url = server.appendingPathComponent("api/v1/dtables/\(token.dtable_uuid)/batch-append-rows/")
+        let gateway = token.use_api_gateway == true || URL(string: token.dtable_server ?? "")?.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")).hasSuffix("api-gateway") == true
+        let url = try Self.baseURL(token, resource: gateway ? "rows" : "batch-append-rows")
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("Bearer \(token.access_token)", forHTTPHeaderField: "Authorization")
@@ -209,24 +228,24 @@ public final class TSClient {
 
     // MARK: - Generic dtable GET with 401-refresh
 
-    private func dtableGet<T: Decodable>(url: URL, accessToken: String, as: T.Type) async throws -> T {
-        var req = URLRequest(url: url)
-        req.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        req.setValue("application/json", forHTTPHeaderField: "Accept")
-        let (data, response) = try await session.data(for: req)
-        if let http = response as? HTTPURLResponse, http.statusCode == 401 {
-            // Stale base token — refresh once and retry.
-            let fresh = try await ensureBaseToken(forceRefresh: true)
-            var retry = req
-            retry.setValue("Bearer \(fresh.access_token)", forHTTPHeaderField: "Authorization")
-            let (data2, response2) = try await session.data(for: retry)
-            try Self.check(response2, data: data2)
-            do { return try decoder.decode(T.self, from: data2) }
+    private func dtableGet<T: Decodable>(resource: String, query: [URLQueryItem] = [], as: T.Type) async throws -> T {
+        let expected = config
+        for attempt in 0...1 {
+            let token = try await ensureBaseToken(forceRefresh: attempt == 1)
+            guard config == expected else { throw CancellationError() }
+            var components = URLComponents(url: try Self.baseURL(token, resource: resource), resolvingAgainstBaseURL: false)!
+            if !query.isEmpty { components.queryItems = query }
+            var request = URLRequest(url: components.url!)
+            request.setValue("Bearer \(token.access_token)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            let (data, response) = try await session.data(for: request)
+            guard config == expected else { throw CancellationError() }
+            if attempt == 0, let http = response as? HTTPURLResponse, [401, 403].contains(http.statusCode) { continue }
+            try Self.check(response, data: data)
+            do { return try decoder.decode(T.self, from: data) }
             catch { throw TSError.decoding(error.localizedDescription) }
         }
-        try Self.check(response, data: data)
-        do { return try decoder.decode(T.self, from: data) }
-        catch { throw TSError.decoding(error.localizedDescription) }
+        throw TSError.transport("Authentication retry exhausted")
     }
 
     private static func check(_ response: URLResponse, data: Data) throws {

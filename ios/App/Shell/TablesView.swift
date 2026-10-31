@@ -7,6 +7,7 @@ struct TablesView: View {
     @Environment(TSClient.self) private var client
     @State private var metadata: TSMetadata?
     @State private var loading = false
+    @State private var loadRequest = UUID()
     @State private var error: String?
     @State private var selected: TSMetadata.Table?
 
@@ -16,7 +17,7 @@ struct TablesView: View {
             content
         }
         .toolbar(.hidden, for: .navigationBar)
-        .task { await load() }
+        .task(id: client.config) { await load() }
         .refreshable { await load() }
         .sheet(item: $selected) { table in
             NavigationStack { RowsView(table: table) }
@@ -70,11 +71,21 @@ struct TablesView: View {
     }
 
     private func load() async {
-        guard client.config != nil else { return }
-        loading = true; error = nil
-        do { metadata = try await client.metadata() }
-        catch { self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription }
-        loading = false
+        let request = UUID(); loadRequest = request
+        let account = client.config
+        guard account != nil else { metadata = nil; loading = false; return }
+        loading = true; error = nil; metadata = nil
+        defer { if loadRequest == request { loading = false } }
+        do {
+            let loaded = try await client.metadata()
+            try Task.checkCancellation()
+            guard loadRequest == request && client.config == account else { return }
+            metadata = loaded
+        } catch is CancellationError { }
+        catch {
+            guard loadRequest == request && client.config == account else { return }
+            self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        }
     }
 }
 
@@ -87,6 +98,7 @@ struct RowsView: View {
 
     @State private var rows: [[String: TSJSON]] = []
     @State private var loading = false
+    @State private var loadRequest = UUID()
     @State private var error: String?
     @State private var query: String = ""
 
@@ -101,7 +113,7 @@ struct RowsView: View {
                 Button("Close") { dismiss() }.font(Theme.Font.mono)
             }
         }
-        .task { await load() }
+        .task(id: client.config) { await load() }
         .refreshable { await load() }
     }
 
@@ -207,9 +219,20 @@ struct RowsView: View {
     }
 
     private func load() async {
-        loading = true; error = nil
-        do { rows = try await client.rows(table: table.name) }
-        catch { self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription }
-        loading = false
+        let request = UUID(); loadRequest = request
+        let account = client.config
+        guard account != nil else { rows = []; loading = false; return }
+        loading = true; error = nil; rows = []
+        defer { if loadRequest == request { loading = false } }
+        do {
+            let loaded = try await client.rows(table: table.name)
+            try Task.checkCancellation()
+            guard loadRequest == request && client.config == account else { return }
+            rows = loaded
+        } catch is CancellationError { }
+        catch {
+            guard loadRequest == request && client.config == account else { return }
+            self.error = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+        }
     }
 }

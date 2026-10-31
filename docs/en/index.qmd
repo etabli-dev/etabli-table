@@ -3,44 +3,10 @@ title: "Établi Table"
 sidebar: en
 ---
 
-<img src="../_icons/icon-table.svg" alt="" width="80" align="right" style="margin:0 0 1rem 1rem;">
+Browse a SeaTable base, its tables and the first 100 rows using a base API token. Cell editing and pagination are unavailable. Tokens are refreshed once on authorization failure.
 
-<span class="etabli-badge">Self-hosted client</span>
+This page describes the October 2026 source revision. These source changes are not part of older development release downloads. Local checks are distinct from device, live-service and store acceptance.
 
-> Bases, tables and rows from your own SeaTable — mobile.
+[Current implementation, prerequisites and commands](../current-status.qmd)
 
-Établi Table is a native iOS and Android client for a self-hosted SeaTable instance. List bases, open tables, view rows and edit individual cells — straight against your own server. Authentication uses a two-tier token hierarchy: a long-lived API token is exchanged for a short-lived base token, which is auto-refreshed.
-
-![Table — not connected; configure the SeaTable server and credentials in Settings.](../_screens/0.1.0/01-login.png){width=320}
-
-## Who benefits
-
-Anyone self-hosting SeaTable (or using their own SeaTable Cloud instance) who needs to reach data on the go — to jot a field note, look up an address, or update a status field.
-
-## Platforms
-
-| Platform | Status |
-|----------|--------|
-| iOS      | ✓      |
-| Android  | ✓      |
-
-## Privacy
-
-No analytics, no third-party SDKs. Sign-in happens on your self-hosted SeaTable server. Credentials (URL + API token) live only in the platform secure store (iOS Keychain · Android EncryptedSharedPreferences); the short-lived base token is kept in memory and auto-refreshed. Traffic only goes to the configured instance.
-
-## Installation
-
-Établi Table is **under active development**. There are no App Store, Google Play or F-Droid releases yet.
-
-| Channel | Status |
-|---------|--------|
-| Android (APK) | **Development build** via [GitHub Releases](https://github.com/etabli-dev/etabli-table/releases) |
-| App Store (iOS) | planned — not yet available |
-| Google Play | planned — not yet available |
-| F-Droid | planned — not yet available |
-
-Details: see [Getting Started](getting-started.qmd).
-
-## Support
-
-If you find the app useful: [Liberapay](https://liberapay.com/rabanheller/).
+[README](https://github.com/etabli-dev/etabli-table/blob/main/README.md) · [GitHub](https://github.com/etabli-dev/etabli-table)

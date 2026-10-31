@@ -1,1 +1,5 @@
-Etabli Table is a client for a self-hosted SeaTable backend. Browse and edit tables and rows. Uses a two-token hierarchy (long-lived API token exchanged for a short-lived base token, cached and auto-refreshed). Talks only to your own server.
+Établi Table: SeaTable base and row browser.
+
+Both platforms browse the tables and rows in one configured SeaTable base. Android shows the first 100 rows with complete column values; iOS shows up to 500 with a local text filter. Row editing and a multi-base account selector are not exposed in the application UI. Further pagination is deferred.
+
+No analytics or author-operated service. Connect to your own HTTPS server with its credentials. Android tokens are encrypted with a device Keystore key. Authenticated redirects are refused and failed connections preserve the previous account.

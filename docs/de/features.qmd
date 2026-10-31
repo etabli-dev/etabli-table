@@ -3,27 +3,14 @@ title: "Funktionen"
 sidebar: de
 ---
 
-Établi Table ist ein schlanker, nativer Client für eine self-hosted SeaTable-Instanz. Er kommuniziert ausschließlich mit dem Server, den Sie angeben — kein zentraler Dienst, kein Dritter dazwischen. Die folgenden Abbildungen sind echte Screenshots des Android-Builds 0.1.0; sie zeigen die Bildschirme, die vor dem Verbinden eines Servers erreichbar sind. Die Datenbildschirme erfordern eine erreichbare SeaTable-Instanz und werden hier nicht simuliert.
+Eine SeaTable-Base, ihre Tabellen und die ersten 100 Zeilen mit einem Base-API-Token ansehen. Zellenbearbeitung und Seitennavigation sind nicht verfügbar. Bei einem Autorisierungsfehler wird der Zugriffstoken einmal erneuert.
 
-## Nicht verbunden — der Startzustand
+Diese Seite beschreibt den Quellstand vom Oktober 2026. Die Änderungen sind unveröffentlicht und nicht Teil älterer Entwicklungsreleases. Lokale Prüfungen ersetzen keine Geräte-, Live-Server- oder Store-Abnahme.
 
-Der Startreiter nutzt die terminalartige Breadcrumb-Leiste der Suite und weist deutlich darauf hin, dass kein SeaTable-Server konfiguriert ist. Er verweist auf die Einstellungen — dort werden zuerst Server und Anmeldedaten festgelegt. Es wird nichts abgerufen, solange keine Verbindung besteht.
+[Current status / Aktueller Stand / État actuel](../current-status.qmd)
+
+Historische Bildschirmfotos aus v0.1.0; sie belegen keine Prüfung des aktuellen Quellstands.
 
 ![Start — nicht verbunden, mit dem Hinweis, in den Einstellungen einen Server zu konfigurieren.](../_screens/0.1.0/01-login.png){width=320}
 
-## Einstellungen — Server und Anmeldedaten
-
-In den Einstellungen geben Sie die URL Ihrer SeaTable-Instanz sowie die Anmeldedaten ein. Die Anmeldedaten liegen im sicheren Speicher der Plattform (Android EncryptedSharedPreferences). Nach dem Verbinden kommuniziert die App direkt mit Ihrem Server — und nur mit diesem.
-
 ![Einstellungen — Eingabe der SeaTable-Server-URL und der Anmeldedaten.](../_screens/0.1.0/02-settings.png){width=320}
-
-## Backend-abhängige Bildschirme
-
-Die Datenbildschirme — Bases durchsuchen, Tabellen öffnen, Zeilen ansehen und einzelne Felder bearbeiten — erfordern eine **erreichbare SeaTable-Instanz und gültige Anmeldedaten**. Diese Bildschirme werden hier **bewusst nicht simuliert**: Sie stehen zur Verfügung, sobald in den Einstellungen ein Server verbunden ist. Eine künftige Aufnahme gegen eine SeaTable-Testinstanz wird diese Seite um die Live-Datenansichten ergänzen.
-
-## Bezugsquelle
-
-Établi Table befindet sich **in aktiver Entwicklung** und ist derzeit nur für Android verfügbar. Installieren Sie das signierte Entwicklungs-APK aus dem Release 0.1.0:
-
-- **Android (signiertes APK)** — [GitHub Releases · v0.1.0](https://github.com/etabli-dev/etabli-table/releases/tag/v0.1.0)
-- App Store (iOS), Google Play und F-Droid — geplant, noch nicht verfügbar.

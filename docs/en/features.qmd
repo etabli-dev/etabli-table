@@ -3,27 +3,14 @@ title: "Features"
 sidebar: en
 ---
 
-Établi Table is a lean, native client for a self-hosted SeaTable instance. It talks only to the server you point it at — there is no central service and no third party in between. The figures below are real screenshots of the v0.1.0 Android build; they show the screens you can reach before connecting a server. The data screens require a reachable SeaTable instance and are not faked here.
+Browse a SeaTable base, its tables and the first 100 rows using a base API token. Cell editing and pagination are unavailable. Tokens are refreshed once on authorization failure.
 
-## Not connected — the home state
+This page describes the October 2026 source revision. These changes are unpublished and are not part of older development releases. Local checks are distinct from device, live-service and store acceptance.
 
-The home tab uses the suite's terminal-style breadcrumb and clearly states that no SeaTable server is configured. It points you to Settings — set the server and credentials there first. Nothing is fetched until you connect.
+[Current status / Aktueller Stand / État actuel](../current-status.qmd)
+
+Historical screenshots from v0.1.0; these are not verification of the current revision.
 
 ![Home — not connected, prompting you to configure a server in Settings.](../_screens/0.1.0/01-login.png){width=320}
 
-## Settings — server & credentials
-
-Settings is where you enter your SeaTable instance URL and credentials. Credentials live in the platform secure store (Android EncryptedSharedPreferences). Once connected, the app talks directly to your server — and only to that server.
-
 ![Settings — enter the SeaTable server URL and credentials.](../_screens/0.1.0/02-settings.png){width=320}
-
-## Backend-dependent screens
-
-The data screens — browsing bases, opening tables, viewing rows and editing individual cells — require a **reachable SeaTable instance and valid credentials**. Those screens are intentionally **not faked** here: they become available once you connect a server in Settings. A future capture against a test SeaTable instance will extend this page with the live data views.
-
-## Where to get it
-
-Établi Table is **under active development** and currently Android-only. Install the signed development APK from the v0.1.0 release:
-
-- **Android (signed APK)** — [GitHub Releases · v0.1.0](https://github.com/etabli-dev/etabli-table/releases/tag/v0.1.0)
-- App Store (iOS), Google Play and F-Droid — planned, not yet available.
