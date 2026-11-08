@@ -101,6 +101,12 @@ struct RowsView: View {
     @State private var loadRequest = UUID()
     @State private var error: String?
     @State private var query: String = ""
+    @State private var selectedRow: RowDetail?
+
+    private struct RowDetail: Identifiable {
+        let id = UUID()
+        let values: [String: TSJSON]
+    }
 
     var body: some View {
         ZStack {
@@ -115,6 +121,25 @@ struct RowsView: View {
         }
         .task(id: client.config) { await load() }
         .refreshable { await load() }
+        .sheet(item: $selectedRow) { row in
+            NavigationStack {
+                List(table.columns) { column in
+                    VStack(alignment: .leading, spacing: Theme.Space.xs) {
+                        Text(column.name).font(.headline)
+                        Text(column.type).font(.caption).foregroundStyle(.secondary)
+                        Text((row.values[column.key] ?? row.values[column.name] ?? .null).display)
+                            .textSelection(.enabled)
+                    }
+                    .accessibilityElement(children: .combine)
+                }
+                .navigationTitle("Row details")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done") { selectedRow = nil }
+                    }
+                }
+            }
+        }
     }
 
     @ViewBuilder
@@ -161,7 +186,7 @@ struct RowsView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 0) {
                 ForEach(table.columns) { col in
-                    Text(col.name)
+                    Text("\(col.name) · \(col.type)")
                         .font(Theme.Font.mono).foregroundStyle(Theme.Color.faint)
                         .padding(.horizontal, Theme.Space.sm).padding(.vertical, Theme.Space.xs)
                         .frame(width: columnWidth(for: col.type), alignment: .leading)
@@ -171,13 +196,18 @@ struct RowsView: View {
             Divider().background(Theme.Color.hairline)
             ForEach(filteredRows.indices, id: \.self) { rowIdx in
                 let row = filteredRows[rowIdx]
-                HStack(spacing: 0) {
-                    ForEach(table.columns) { col in
-                        cell(row: row, column: col)
-                            .padding(.horizontal, Theme.Space.sm).padding(.vertical, Theme.Space.xs)
-                            .frame(width: columnWidth(for: col.type), alignment: .leading)
+                Button { selectedRow = RowDetail(values: row) } label: {
+                    HStack(spacing: 0) {
+                        ForEach(table.columns) { col in
+                            cell(row: row, column: col)
+                                .padding(.horizontal, Theme.Space.sm).padding(.vertical, Theme.Space.xs)
+                                .frame(width: columnWidth(for: col.type), alignment: .leading)
+                        }
                     }
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .accessibilityHint("Show complete row values")
                 Divider().background(Theme.Color.hairline)
             }
         }
@@ -221,6 +251,7 @@ struct RowsView: View {
     private func load() async {
         let request = UUID(); loadRequest = request
         let account = client.config
+        selectedRow = nil
         guard account != nil else { rows = []; loading = false; return }
         loading = true; error = nil; rows = []
         defer { if loadRequest == request { loading = false } }
