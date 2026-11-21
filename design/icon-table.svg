@@ -1,12 +1,10 @@
-<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Table">
+  <!-- Établi Table icon. Coder design system: #28A745 tile, white glyph, one-line glyph ≈70% of the tile, stroke 44 @1024 (aligned to the suite icon, Nov 2026). -->
   <rect width="1024" height="1024" fill="#28A745"/>
-  <g id="glyph" fill="none" stroke="#FFFFFF" stroke-width="36"
-     stroke-linecap="round" stroke-linejoin="round">
-    <!-- 3x3 grid -->
-    <rect x="280" y="280" width="464" height="464" rx="20"/>
-    <line x1="435" y1="280" x2="435" y2="744"/>
-    <line x1="590" y1="280" x2="590" y2="744"/>
-    <line x1="280" y1="435" x2="744" y2="435"/>
-    <line x1="280" y1="590" x2="744" y2="590"/>
+  <g transform="translate(512,512) scale(1.32473) translate(-512.00,-512.00)">
+  <g stroke-width="33.214" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 280 420 H 744 V 316 A 36 36 0 0 0 708 280 H 316 A 36 36 0 0 0 280 316 V 708 A 36 36 0 0 0 316 744 H 708 A 36 36 0 0 0 744 708 V 420" fill="none" stroke="#FFFFFF"/>
+    <line x1="450" y1="420" x2="450" y2="744" fill="none" stroke="#FFFFFF"/>
+  </g>
   </g>
 </svg>
