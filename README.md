@@ -2,7 +2,7 @@
 
 > SeaTable base and row browser.
 
-`iOS` `Android` · Apache-2.0 · Part of the [Établi Suite](https://github.com/etabli-dev)
+`iOS` `Android` · AGPL-3.0-only · Part of the [Établi Suite](https://github.com/etabli-dev)
 
 Both platforms browse the tables and rows in one configured SeaTable base. Android shows the first 100 rows with complete column values; iOS shows up to 500 with a local text filter. Row editing and a multi-base account selector are not exposed in the application UI. Further pagination is deferred.
 
@@ -99,5 +99,8 @@ resolve device findings, configure signing and prepare the store package for app
 
 ## License
 
-Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+GNU Affero General Public License v3.0 only (AGPL-3.0-only) — see [LICENSE](LICENSE) and
+[NOTICE](NOTICE). Commercial licences are available from the copyright holder
+(etabli.dev@outlook.com). Third-party components keep their own licences. Versions published
+before 22 November 2026 remain available under Apache-2.0.
 Copyright 2026 R. Heller.
