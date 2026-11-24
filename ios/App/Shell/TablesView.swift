@@ -5,6 +5,7 @@ import SwiftUI
 
 struct TablesView: View {
     @Environment(TSClient.self) private var client
+    @Environment(\.themeAccent) private var accent
     @State private var metadata: TSMetadata?
     @State private var loading = false
     @State private var loadRequest = UUID()
@@ -52,8 +53,8 @@ struct TablesView: View {
                             Button { selected = t } label: {
                                 ListRow(
                                     title: t.name,
-                                    metadata: "\(t.columns.count) columns",
-                                    leading: { Image(systemName: "tablecells").foregroundStyle(Theme.Color.accent) },
+                                    metadata: String(localized: "\(t.columns.count) columns"),
+                                    leading: { Image(systemName: "tablecells").foregroundStyle(accent).accessibilityHidden(true) },
                                     trailing: {
                                         Image(systemName: "chevron.right")
                                             .font(Theme.Font.mono).foregroundStyle(Theme.Color.faint)
@@ -66,7 +67,7 @@ struct TablesView: View {
                         }
                     }
                 }
-            }.padding(Theme.Space.lg)
+            }.padding(Theme.Space.lg).readableColumn()
         }
     }
 
@@ -95,6 +96,7 @@ struct RowsView: View {
     let table: TSMetadata.Table
     @Environment(TSClient.self) private var client
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.themeAccent) private var accent
 
     @State private var rows: [[String: TSJSON]] = []
     @State private var loading = false
@@ -224,7 +226,8 @@ struct RowsView: View {
         if column.type == "checkbox" {
             if case .bool(let b) = value {
                 Image(systemName: b ? "checkmark.square.fill" : "square")
-                    .foregroundStyle(Theme.Color.accent)
+                    .foregroundStyle(accent)
+                    .accessibilityLabel(b ? "checked" : "unchecked")
             } else {
                 MonoLabel("", color: Theme.Color.faint)
             }

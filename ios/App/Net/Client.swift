@@ -30,11 +30,11 @@ public enum TSError: Error, LocalizedError {
     case noActiveBase
     public var errorDescription: String? {
         switch self {
-        case .notConfigured: "Configure base URL + API token in Settings."
-        case .http(let s, _): "Server returned HTTP \(s)."
-        case .decoding(let m): "Couldn't decode response: \(m)."
-        case .transport(let m): "Network error: \(m)."
-        case .noActiveBase: "Pick a base to load tables."
+        case .notConfigured: String(localized: "Configure base URL + API token in Settings.")
+        case .http(let s, _): String(localized: "Server returned HTTP \(s).")
+        case .decoding(let m): String(localized: "Couldn't decode response: \(sentence(m))")
+        case .transport(let m): String(localized: "Network error: \(sentence(m))")
+        case .noActiveBase: String(localized: "Pick a base to load tables.")
         }
     }
 }
@@ -185,7 +185,7 @@ public final class TSClient {
 
     static func baseURL(_ access: TSAccessTokenResponse, resource: String) throws -> URL {
         guard !access.access_token.isEmpty, UUID(uuidString: access.dtable_uuid) != nil,
-              let raw = access.dtable_server, let url = URL(string: raw) else { throw TSError.decoding("Invalid base token response") }
+              let raw = access.dtable_server, let url = URL(string: raw) else { throw TSError.decoding(String(localized: "Invalid base token response")) }
         let server = try secureServer(url)
         let version = access.use_api_gateway == true || server.path.hasSuffix("/api-gateway") ? "v2" : "v1"
         return server.appendingPathComponent("api/\(version)/dtables/\(access.dtable_uuid)/\(resource)/")
@@ -200,7 +200,7 @@ public final class TSClient {
     public struct RowsResponse: Decodable, Sendable { public let rows: [[String: TSJSON]] }
 
     public func rows(table: String, limit: Int = 500) async throws -> [[String: TSJSON]] {
-        guard !table.isEmpty && (1...1000).contains(limit) else { throw TSError.decoding("Select a table and a row limit from 1 to 1000") }
+        guard !table.isEmpty && (1...1000).contains(limit) else { throw TSError.decoding(String(localized: "Select a table and a row limit from 1 to 1000")) }
         let payload = try await dtableGet(resource: "rows", query: [URLQueryItem(name: "table_name", value: table), URLQueryItem(name: "limit", value: String(limit))], as: RowsResponse.self)
         return payload.rows
     }
@@ -245,12 +245,12 @@ public final class TSClient {
             do { return try decoder.decode(T.self, from: data) }
             catch { throw TSError.decoding(error.localizedDescription) }
         }
-        throw TSError.transport("Authentication retry exhausted")
+        throw TSError.transport(String(localized: "Authentication retry exhausted"))
     }
 
     private static func check(_ response: URLResponse, data: Data) throws {
         guard let http = response as? HTTPURLResponse else {
-            throw TSError.transport("No HTTP response")
+            throw TSError.transport(String(localized: "No HTTP response"))
         }
         guard (200..<300).contains(http.statusCode) else {
             throw TSError.http(status: http.statusCode, body: String(data: data, encoding: .utf8))
@@ -267,4 +267,9 @@ public final class TSClient {
         case .null: NSNull()
         }
     }
+}
+
+/// A system message as one sentence: adds a final period only when the message has none.
+private func sentence(_ message: String) -> String {
+    message.hasSuffix(".") ? message : message + "."
 }

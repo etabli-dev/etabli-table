@@ -6,6 +6,8 @@
 
 Both platforms browse the tables and rows in one configured SeaTable base. Android shows the first 100 rows with complete column values; iOS shows up to 500 with a local text filter. Row editing and a multi-base account selector are not exposed in the application UI. Further pagination is deferred.
 
+Appearance (iOS, Settings → Appearance): app language (System/Deutsch/English; the iOS app is fully translated into German), System/Light/Dark and accent colour; default Hugo Coder palette.
+
 ## Availability
 
 Établi Table is **under active development**. There are no App Store, Google Play or F-Droid releases yet.
@@ -59,7 +61,8 @@ python3 scripts/check_swift.py
 ```
 
 These checks compile the production client/transport/Keychain wrapper, exercise
-the client using isolated in-memory credentials and HTTP protocol fixtures, and
+the client using isolated in-memory credentials and HTTP protocol fixtures,
+check the appearance model (stored-value fallback, colour table, contrast) and
 parse the SwiftUI sources. They do not establish a complete iOS build or a real
 server connection. Android TLS fixtures use normal trust validation with a local
 test certificate. See [the refinement record](docs/refinement-2026-10.md).
